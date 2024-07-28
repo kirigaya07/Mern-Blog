@@ -1,5 +1,13 @@
+"use client";
+
+import { Button } from "flowbite-react";
+
 function Projects() {
-  return <div>Projects</div>;
+  return (
+    <Button color="blue" pill>
+      Blue
+    </Button>
+  );
 }
 
 export default Projects;
