@@ -1,13 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+// import dbConnect from "./dbConnect.js";
 
 dotenv.config();
 
+const url = process.env.MONGODB_URL;
+
 mongoose
-  .connect(process.env.MONGODB)
+  .connect(url)
   .then(() => {
-    console.log("MongoDb connected");
+    console.log("MongoDB Connected");
   })
   .catch((err) => {
     console.log(err);
