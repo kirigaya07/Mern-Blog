@@ -39,6 +39,7 @@ export default function Header() {
           className="w-12 h-10 hidden sm:inline"
           color="gray"
           onClick={() => dispatch(toggleTheme())}
+          pill
         >
           {theme === "light" ? <FaMoon /> : <FaSun />}
         </Button>
