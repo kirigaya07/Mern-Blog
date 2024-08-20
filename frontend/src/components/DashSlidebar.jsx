@@ -1,5 +1,5 @@
 import { Sidebar } from "flowbite-react";
-import { HiDocumentText, HiUser } from "react-icons/hi";
+import { HiDocumentText, HiOutlineUserGroup, HiUser } from "react-icons/hi";
 import { GoSignOut } from "react-icons/go";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -58,6 +58,17 @@ export default function DashSlidebar() {
                 as="div"
               >
                 Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=users">
+              <Sidebar.Item
+                active={tab === "users"}
+                icon={HiOutlineUserGroup}
+                as="div"
+              >
+                Users
               </Sidebar.Item>
             </Link>
           )}
