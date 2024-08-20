@@ -2,42 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body{
-    height: 100vh;
+body {
+    min-height: 100vh;
+    background-color: #f9f9f9;
 }
 
-.q1-editor{
+.dark body {
+    background-color: #1a202c;
+}
+
+.q1-editor {
     font-size: 1.05rem;
+    line-height: 1.6;
 }
 
-.post-content p{
-    margin-bottom: 0.5rem;
+.post-content {
+    line-height: 1.75;
+    color: #333;
 }
 
-.post-content h1{
-    font-size: 1.5rem;
+.dark .post-content {
+    color: #e2e8f0; /* Light text color for dark mode */
+}
+
+.post-content p {
+    margin-bottom: 1rem;
+}
+
+.post-content h1, .post-content h2, .post-content h3 {
+    font-family: 'Merriweather', serif;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.dark .post-content h1, .dark .post-content h2, .dark .post-content h3 {
+    color: #edf2f7; /* Lighter heading colors in dark mode */
+}
+
+.post-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 2rem;
+}
+
+.post-content h2 {
+    font-size: 1.75rem;
     font-weight: 600;
-    font-family: sans-serif;
-    margin: 1.5rem;
 }
 
-.post-content h2{
-
-    font-size: 1.4rem;
-    font-family: sans-serif;
-    margin: 1.5rem 0;
+.post-content h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
-.post-content a{
-    color: rgb(73, 149,199);
-    text-decoration: none;
+.post-content ul, .post-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
 }
 
-.post-content a:hover{
+.post-content a {
+    color: #1e90ff;
     text-decoration: underline;
+    transition: color 0.3s ease;
 }
 
-.dark .post-content a{
-    color: red;
+.post-content a:hover {
+    color: #ff6347;
+}
+
+.dark .post-content a {
+    color: #63b3ed; /* Adjusted link color for dark mode */
+}
+
+.dark .post-content a:hover {
+    color: #90cdf4; /* Adjusted hover color for dark mode */
+}
+
+img {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .post-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .post-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .post-content img {
+        max-height: 300px;
+    }
 }
