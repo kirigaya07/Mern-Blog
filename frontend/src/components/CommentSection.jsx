@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { Alert, Button, Textarea } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,8 @@ export default function CommentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
+  const [comments, setComments] = useState([]);
+  console.log(comments);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +37,21 @@ export default function CommentSection({ postId }) {
       setCommentError(error.message);
     }
   };
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await fetch(`/api/comment/getPostComments/${postId}`);
+        const data = await res.json();
+        if (res.ok) {
+          setComments(data);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+  }, [postId]);
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
