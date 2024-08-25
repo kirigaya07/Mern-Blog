@@ -156,7 +156,7 @@ export default function CommentSection({ postId }) {
               {200 - comment.length} charaters remaining
             </p>
             <Button type="submit" outline gradientDuoTone="purpleToBlue">
-              Submit
+              Post
             </Button>
           </div>
           {commentError && (
