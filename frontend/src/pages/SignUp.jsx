@@ -3,6 +3,7 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+
 function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
