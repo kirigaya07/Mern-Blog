@@ -130,8 +130,7 @@ export default function DashboardComp() {
             <h1 className="text-center">Recent Users</h1>
 
             <Button outline gradientDuoTone={"purpleToPink"}>
-              <Link to={"/dashboard?tab=users"}></Link>
-              See all
+              <Link to={"/dashboard?tab=users"}> See all</Link>
             </Button>
           </div>
           <Table hoverable>
