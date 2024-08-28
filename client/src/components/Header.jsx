@@ -16,7 +16,6 @@ export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(searchTerm);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -49,34 +48,42 @@ export default function Header() {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+
   return (
-    <Navbar className="border-b-2">
+    <Navbar className="border-b-2 border-gray-200 bg-white dark:bg-gray-900 shadow-md">
       <Link
         to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
+        className="flex items-center space-x-2 text-sm sm:text-xl font-semibold text-teal-500 dark:text-teal-300 transition-all hover:text-teal-600 dark:hover:text-teal-400"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-purple-500 via-blue-400 to-blue-500 rounded-lg text-white">
-          Zudo's{" "}
+        <span className="px-2 py-1 bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 rounded-lg text-white shadow-lg">
+          Zudo's
         </span>
-        Blog
+        <span>Blog</span>
       </Link>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className="relative flex-1 max-w-xs mx-4 hidden lg:flex"
+      >
         <TextInput
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
-          className="hidden lg:inline"
+          className="w-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-0 focus:border-teal-600 dark:focus:border-teal-300 shadow-none"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
-        {" "}
+      <Button
+        className="w-12 h-10 lg:hidden"
+        color="gray"
+        pill
+        onClick={() => navigate(`/search?searchTerm=${searchTerm}`)}
+      >
         <AiOutlineSearch />
       </Button>
-      <div className="flex gap-2 md:order-2">
+      <div className="flex items-center gap-4 md:order-2">
         <Button
-          className="w-12 h-10 hidden sm:inline"
+          className="w-12 h-10"
           color="gray"
           onClick={() => dispatch(toggleTheme())}
           pill
@@ -92,12 +99,15 @@ export default function Header() {
                 alt="userAvatar"
                 img={currentUser.profilePicture}
                 rounded
+                className="shadow-none"
               />
             }
           >
             <Dropdown.Header>
-              <span className="block text-sm">@{currentUser.username}</span>
-              <span className="block truncate text-sm font-medium">
+              <span className="block text-sm font-medium text-gray-800 dark:text-gray-200">
+                @{currentUser.username}
+              </span>
+              <span className="block truncate text-sm text-gray-500 dark:text-gray-400">
                 {currentUser.email}
               </span>
             </Dropdown.Header>
@@ -108,22 +118,43 @@ export default function Header() {
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
-          <>
+          <div className="flex items-center gap-2">
             <Link to="/sign-in">
               <Button gradientDuoTone="purpleToBlue">Sign In</Button>
             </Link>
             <Navbar.Toggle />
-          </>
+          </div>
         )}
-      </div>{" "}
+      </div>
       <Navbar.Collapse>
-        <Navbar.Link active={path === "/"} as={"div"}>
+        <Navbar.Link
+          as={"div"}
+          className={`text-sm ${
+            path === "/"
+              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+              : "text-gray-800 dark:text-gray-200"
+          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+        >
           <Link to="/">Home</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/about"} as={"div"}>
+        <Navbar.Link
+          as={"div"}
+          className={`text-sm ${
+            path === "/about"
+              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+              : "text-gray-800 dark:text-gray-200"
+          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+        >
           <Link to="/about">About</Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/projects"} as={"div"}>
+        <Navbar.Link
+          as={"div"}
+          className={`text-sm ${
+            path === "/projects"
+              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+              : "text-gray-800 dark:text-gray-200"
+          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+        >
           <Link to="/projects">Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>

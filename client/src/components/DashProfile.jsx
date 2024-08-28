@@ -30,7 +30,7 @@ export default function DashProfile() {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
-  const [updateUserSucces, setUpdateUserSucces] = useState(null);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [imageFileUploading, setImageFileUploading] = useState(false);
@@ -56,10 +56,10 @@ export default function DashProfile() {
     setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile.name; // To make the unquie name as time will be unique
+    const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile); // Get info while uploading the file
-    //get info about the upload like no. of bytes or any error occurred during the upload of file
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -86,14 +86,14 @@ export default function DashProfile() {
     );
   };
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateUserError(null);
-    setUpdateUserSucces(null);
+    setUpdateUserSuccess(null);
     if (Object.keys(formData).length === 0) {
       setUpdateUserError("No changes made");
       return;
@@ -115,7 +115,7 @@ export default function DashProfile() {
         setUpdateUserError(data.message);
       } else {
         dispatch(updateSuccess(data));
-        setUpdateUserSucces("User's profile updated successfully");
+        setUpdateUserSuccess("Profile updated successfully");
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
@@ -123,7 +123,7 @@ export default function DashProfile() {
     }
   };
 
-  const handleDeleteUser = async (e) => {
+  const handleDeleteUser = async () => {
     setShowModal(false);
     try {
       dispatch(deleteUserStart());
@@ -148,7 +148,7 @@ export default function DashProfile() {
       });
       const data = await res.json();
       if (!res.ok) {
-        console.log(error.message);
+        console.log(data.message);
       } else {
         dispatch(signOutSuccess());
       }
@@ -156,19 +156,22 @@ export default function DashProfile() {
       console.log(error);
     }
   };
+
   return (
-    <div className="max-w-lg mx-auto p-3 w-full">
-      <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
+    <div className="max-w-lg mx-auto p-5 w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h1 className="my-7 text-center text-3xl font-semibold text-gray-900 dark:text-gray-100">
+        Profile
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="file"
-          accept="image./*"
+          accept="image/*"
           onChange={handleImageChange}
           ref={filePickerRef}
           hidden
         />
         <div
-          className="relative w-32 h32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
+          className="relative w-32 h-32 self-center cursor-pointer rounded-full overflow-hidden shadow-lg border-2 border-gray-300 dark:border-gray-600"
           onClick={() => filePickerRef.current.click()}
         >
           {imageFileUploadProgress && (
@@ -193,10 +196,10 @@ export default function DashProfile() {
           <img
             src={imageFileUrl || currentUser.profilePicture}
             alt="user"
-            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-              imageFileUploadProgress &&
-              imageFileUploadProgress < 100 &&
-              "opacity-60"
+            className={`w-full h-full object-cover rounded-full border-4 border-light-gray ${
+              imageFileUploadProgress && imageFileUploadProgress < 100
+                ? "opacity-60"
+                : ""
             }`}
           />
         </div>
@@ -207,61 +210,67 @@ export default function DashProfile() {
         <TextInput
           type="text"
           id="username"
-          placeholder="username"
+          placeholder="Username"
           defaultValue={currentUser.username}
           onChange={handleChange}
         />
         <TextInput
           type="email"
           id="email"
-          placeholder="email"
+          placeholder="Email"
           defaultValue={currentUser.email}
           onChange={handleChange}
         />
         <TextInput
           type="password"
           id="password"
-          placeholder="password"
+          placeholder="New Password"
           onChange={handleChange}
         />
         <Button
           type="submit"
           gradientDuoTone="purpleToBlue"
           outline
-          disabled={loading && imageFileUploading}
+          disabled={loading || imageFileUploading}
         >
-          {loading ? "Loading..." : "Update"}
+          {loading ? "Updating..." : "Update Profile"}
         </Button>
         {currentUser && (
-          <Link to={"/create-post"}>
+          <Link to="/create-post">
             <Button
               type="button"
               gradientDuoTone="purpleToBlue"
-              className="w-full"
+              className="w-full mt-4"
             >
               Create a Post
             </Button>
           </Link>
         )}
       </form>
-      <div className="text-red-500 flex justify-between mt-5">
-        <span onClick={() => setShowModal(true)} className="cursor-pointer">
+      <div className="flex justify-between mt-5 text-red-600 dark:text-red-400">
+        <span
+          onClick={() => setShowModal(true)}
+          className="cursor-pointer hover:underline"
+        >
           Delete Account
         </span>
-        <span onClick={handleSignOut} className="cursor-pointer">
+        <span
+          onClick={handleSignOut}
+          className="cursor-pointer hover:underline"
+        >
           Sign Out
         </span>
       </div>
-      {updateUserSucces && (
+      {updateUserSuccess && (
         <Alert className="mt-5" color="success">
-          {updateUserSucces}
+          {updateUserSuccess}
         </Alert>
       )}
       {updateUserError && (
         <Alert className="mt-5" color="failure">
           {updateUserError}
         </Alert>
-      )}{" "}
+      )}
       {error && (
         <Alert className="mt-5" color="failure">
           {error}
@@ -276,8 +285,8 @@ export default function DashProfile() {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:texxt-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
+            <HiOutlineExclamationCircle className="h-16 w-16 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="mb-5 text-lg text-gray-700 dark:text-gray-300">
               Are you sure you want to delete your account?
             </h3>
             <div className="flex justify-center gap-4">
