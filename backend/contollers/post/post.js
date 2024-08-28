@@ -38,11 +38,10 @@ export const getPost = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order === "asc" ? 1 : -1;
 
-    // Build the query object with spread operator only when the value is truthy
     const query = {
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
-      ...(req.query.slug && { slug: req.query.slug }), // Fixed slug to be consistent with other keys
+      ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
@@ -52,7 +51,7 @@ export const getPost = async (req, res, next) => {
       }),
     };
 
-    console.log("Constructed query object:", query); // Optional: Debugging log
+    console.log("Constructed query object:", query);
 
     const posts = await Post.find(query)
       .sort({ updatedAt: sortDirection })
@@ -73,7 +72,6 @@ export const getPost = async (req, res, next) => {
 
     res.status(200).json({ posts, totalPosts, lastMonthPosts });
   } catch (error) {
-    console.error("Error occurred:", error); // Optional: Debugging log
     next(error);
   }
 };
