@@ -17,6 +17,7 @@ export default function DashSlidebar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [tab, setTab] = useState("");
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
@@ -40,8 +41,9 @@ export default function DashSlidebar() {
       console.log(error);
     }
   };
+
   return (
-    <Sidebar className="w-full md:w-56">
+    <Sidebar className="w-full md:w-56 border-r border-gray-300 dark:border-gray-700 shadow-sm">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
           {currentUser && currentUser.isAdmin && (
@@ -53,7 +55,6 @@ export default function DashSlidebar() {
                 labelColor="dark"
                 as="div"
               >
-                {" "}
                 Dashboard
               </Sidebar.Item>
             </Link>
@@ -66,7 +67,6 @@ export default function DashSlidebar() {
               labelColor="dark"
               as="div"
             >
-              {" "}
               Profile
             </Sidebar.Item>
           </Link>
@@ -105,7 +105,6 @@ export default function DashSlidebar() {
           )}
 
           <Sidebar.Item onClick={handleSignOut} icon={GoSignOut}>
-            {" "}
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>

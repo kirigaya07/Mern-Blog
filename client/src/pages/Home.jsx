@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import CallToAction from "../components/CallToAction";
 import { useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 export default function Home() {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,28 +17,77 @@ export default function Home() {
     fetchPosts();
   }, []);
 
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Trigger animation only once
+    threshold: 0.1, // Element is considered in view when 10% is visible
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        staggerChildren: 0.3,
+        duration: 0.8,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div>
-      <div className="flex flex-col gap-6 p-28 px-3">
-        <h1 className="text-3xl font-bold lg:text-6xl">Welcome to my Blog</h1>
-        <p className="text-gray-500 text-xs sm:text-sm">
-          Here you will fin a variety of articles and tutorials on topics such
-          as web development, software engineering, Software engineering, and
-          programming languages.
-        </p>
+    <motion.div
+      initial="hidden"
+      animate={controls}
+      ref={ref}
+      variants={containerVariants}
+      className="flex flex-col gap-6 p-28 px-3"
+    >
+      <motion.h1
+        variants={itemVariants}
+        className="text-3xl font-bold lg:text-6xl"
+      >
+        Welcome to my Blog
+      </motion.h1>
+      <motion.p
+        variants={itemVariants}
+        className="text-gray-500 text-xs sm:text-sm"
+      >
+        Here you will find a variety of articles and tutorials on topics such as
+        web development, software engineering, and programming languages.
+      </motion.p>
+      <motion.div variants={itemVariants}>
         <Link
           to="/search"
           className="text-xs sm:text-sm text-teal-500 font-bold hover:underline"
         >
           View all posts
         </Link>
-      </div>
-      <div className="p-3 bg-amber-100 dark:bg-slate-700">
+      </motion.div>
+      <motion.div
+        variants={itemVariants}
+        className="p-3 bg-amber-100 dark:bg-slate-700"
+      >
         <CallToAction />
-      </div>
-      <div className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7">
+      </motion.div>
+      <motion.div
+        variants={itemVariants}
+        className="max-w-6xl mx-auto p-3 flex flex-col gap-8 py-7"
+      >
         {posts && posts.length > 0 && (
-          <div className="">
+          <div>
             <h1 className="text-2xl font-semibold text-center">Recent Posts</h1>
             <div className="flex flex-wrap gap-3">
               {posts.map((post) => (
@@ -51,7 +102,7 @@ export default function Home() {
             </Link>
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
