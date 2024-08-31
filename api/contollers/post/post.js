@@ -1,4 +1,3 @@
-import { parse } from "dotenv";
 import Post from "../../models/post/post.js";
 import { errorHandler } from "../../utils/errors.js";
 
@@ -50,8 +49,6 @@ export const getPost = async (req, res, next) => {
         ],
       }),
     };
-
-    console.log("Constructed query object:", query);
 
     const posts = await Post.find(query)
       .sort({ updatedAt: sortDirection })
