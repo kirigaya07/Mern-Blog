@@ -235,7 +235,7 @@ export default function DashProfile() {
         >
           {loading ? "Updating..." : "Update Profile"}
         </Button>
-        {currentUser && (
+        {currentUser.isAdmin && (
           <Link to="/create-post">
             <Button
               type="button"

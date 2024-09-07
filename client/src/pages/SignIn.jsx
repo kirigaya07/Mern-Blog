@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   signInFailure,
   signInStart,
-  signInSucces,
+  signInSuccess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
 
@@ -38,7 +38,7 @@ function SignIn() {
       }
 
       if (res.ok) {
-        dispatch(signInSucces(data));
+        dispatch(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {

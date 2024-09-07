@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import SignIn from "./pages/SignIn";
@@ -27,16 +27,16 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/search" element={<Search />} />
         <Route element={<PrivateRoute />}>
-          {" "}
-          <Route path="/dashboard" element={<Dashboard />} />{" "}
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
-          {" "}
-          <Route path="/create-post" element={<CreatePost />} />{" "}
-          <Route path="/update-post/:postId" element={<UpdatePost />} />{" "}
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
         <Route path="/projects" element={<Projects />} />
         <Route path="/post/:postSlug" element={<PostPage />} />
+        {/* Catch-all route to redirect to /sign-in for unknown paths */}
+        <Route path="*" element={<Navigate to="/sign-in" replace />} />
       </Routes>
       <FooterCom />
     </BrowserRouter>
