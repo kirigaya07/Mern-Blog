@@ -129,31 +129,28 @@ export default function Header() {
       <Navbar.Collapse>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${
-            path === "/"
+          className={`text-sm ${path === "/"
               ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
               : "text-gray-800 dark:text-gray-200"
-          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
         >
           <Link to="/">Home</Link>
         </Navbar.Link>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${
-            path === "/about"
+          className={`text-sm ${path === "/about"
               ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
               : "text-gray-800 dark:text-gray-200"
-          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
         >
           <Link to="/about">About</Link>
         </Navbar.Link>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${
-            path === "/projects"
+          className={`text-sm ${path === "/projects"
               ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
               : "text-gray-800 dark:text-gray-200"
-          } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
         >
           <Link to="/projects">Projects</Link>
         </Navbar.Link>

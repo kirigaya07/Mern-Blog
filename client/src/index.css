@@ -96,3 +96,25 @@ img {
         max-height: 300px;
     }
 }
+
+.ql-editor {
+  min-height: 200px;
+  font-size: 1.1rem;
+  line-height: 1.75;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.dark .ql-toolbar {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+.dark .ql-editor {
+  color: #e5e7eb;
+}
