@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
 import { signOutSuccess } from "../redux/user/userSlice";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -50,17 +51,27 @@ export default function Header() {
   };
 
   return (
-    <Navbar className="border-b-2 border-gray-200 bg-white dark:bg-gray-900 shadow-md">
-      <Link
-        to="/"
-        className="flex items-center space-x-2 text-sm sm:text-xl font-semibold text-teal-500 dark:text-teal-300 transition-all hover:text-teal-600 dark:hover:text-teal-400"
+    <Navbar className="border-b-2 border-gray-200 bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 rounded-lg text-white shadow-lg">
-          Zudo's
-        </span>
-        <span>Blog</span>
-      </Link>
-      <form
+        <Link
+          to="/"
+          className="flex items-center space-x-2 text-sm sm:text-xl font-semibold text-purple-600 dark:text-purple-400 transition-all hover:text-purple-700 dark:hover:text-purple-300"
+        >
+          <span className="px-2 py-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 rounded-lg text-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+            Zudo's
+          </span>
+          <span>Blog</span>
+        </Link>
+      </motion.div>
+
+      <motion.form
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
         onSubmit={handleSubmit}
         className="relative flex-1 max-w-xs mx-4 hidden lg:flex"
       >
@@ -68,28 +79,36 @@ export default function Header() {
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
-          className="w-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-0 focus:border-teal-600 dark:focus:border-teal-300 shadow-none"
+          className="w-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border-0 focus:border-purple-500 dark:focus:border-purple-400 shadow-none rounded-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </form>
-      <Button
-        className="w-12 h-10 lg:hidden"
-        color="gray"
-        pill
-        onClick={() => navigate(`/search?searchTerm=${searchTerm}`)}
+      </motion.form>
+
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex items-center gap-4 md:order-2"
       >
-        <AiOutlineSearch />
-      </Button>
-      <div className="flex items-center gap-4 md:order-2">
         <Button
-          className="w-12 h-10"
+          className="w-12 h-10 hover:scale-105 transition-transform duration-200"
           color="gray"
           onClick={() => dispatch(toggleTheme())}
           pill
         >
           {theme === "light" ? <FaMoon /> : <FaSun />}
         </Button>
+
+        <Button
+          className="w-12 h-10 lg:hidden hover:scale-105 transition-transform duration-200"
+          color="gray"
+          pill
+          onClick={() => navigate(`/search?searchTerm=${searchTerm}`)}
+        >
+          <AiOutlineSearch />
+        </Button>
+
         {currentUser ? (
           <Dropdown
             arrowIcon={false}
@@ -99,7 +118,7 @@ export default function Header() {
                 alt="userAvatar"
                 img={currentUser.profilePicture}
                 rounded
-                className="shadow-none"
+                className="shadow-none hover:ring-2 hover:ring-purple-500 transition-all duration-200"
               />
             }
           >
@@ -120,39 +139,48 @@ export default function Header() {
         ) : (
           <div className="flex items-center gap-2">
             <Link to="/sign-in">
-              <Button gradientDuoTone="purpleToBlue">Sign In</Button>
+              <Button
+                gradientDuoTone="purpleToPink"
+                className="hover:scale-105 transition-transform duration-200"
+              >
+                Sign In
+              </Button>
             </Link>
             <Navbar.Toggle />
           </div>
         )}
-      </div>
+      </motion.div>
+
       <Navbar.Collapse>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${path === "/"
-              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+          className={`text-sm ${
+            path === "/"
+              ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-500"
               : "text-gray-800 dark:text-gray-200"
-            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+          } hover:text-purple-600 dark:hover:text-purple-400 transition-all`}
         >
           <Link to="/">Home</Link>
         </Navbar.Link>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${path === "/about"
-              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+          className={`text-sm ${
+            path === "/about"
+              ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-500"
               : "text-gray-800 dark:text-gray-200"
-            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+          } hover:text-purple-600 dark:hover:text-purple-400 transition-all`}
         >
           <Link to="/about">About</Link>
         </Navbar.Link>
         <Navbar.Link
           as={"div"}
-          className={`text-sm ${path === "/projects"
-              ? "text-teal-600 dark:text-teal-400 border-b-2 border-teal-500"
+          className={`text-sm ${
+            path === "/projects"
+              ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-500"
               : "text-gray-800 dark:text-gray-200"
-            } hover:text-teal-600 dark:hover:text-teal-400 transition-all`}
+          } hover:text-purple-600 dark:hover:text-purple-400 transition-all`}
         >
-          <Link to="/projects">Projects</Link>
+          <Link to="/resources">Resources</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
