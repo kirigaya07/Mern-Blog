@@ -33,7 +33,7 @@ function App() {
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
-        <Route path="/projects" element={<Projects />} />
+        <Route path="/resources" element={<Projects />} />
         <Route path="/post/:postSlug" element={<PostPage />} />
         {/* Catch-all route to redirect to /sign-in for unknown paths */}
         <Route path="*" element={<Navigate to="/sign-in" replace />} />

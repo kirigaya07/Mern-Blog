@@ -40,6 +40,7 @@ export default function OAuth() {
       gradientDuoTone="pinkToOrange"
       outline
       onClick={handleGoogleCLick}
+      className="w-auto"
     >
       <AiFillGoogleCircle className="w-6 h-6 mr-2" />
       Continue with Google
