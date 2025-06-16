@@ -1,37 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Modal, Table, Spinner } from "flowbite-react";
+import { Button, Modal, Table } from "flowbite-react";
 import { useState, useEffect } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
-  const [showMore, setShowmore] = useState(true);
+  const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      setLoading(true);
       try {
+        setLoading(true);
         const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
           if (data.posts.length < 9) {
-            setShowmore(false);
+            setShowMore(false);
           }
         }
+        setLoading(false);
       } catch (error) {
         console.log(error.message);
-      } finally {
         setLoading(false);
       }
     };
-
     if (currentUser.isAdmin) {
       fetchPosts();
     }
@@ -39,7 +39,6 @@ export default function DashPosts() {
 
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
-    setLoading(true);
     try {
       const res = await fetch(
         `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
@@ -48,13 +47,11 @@ export default function DashPosts() {
       if (res.ok) {
         setUserPosts((prev) => [...prev, ...data.posts]);
         if (data.posts.length < 9) {
-          setShowmore(false);
+          setShowMore(false);
         }
       }
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.log(error.message);
     }
   };
 
@@ -76,89 +73,122 @@ export default function DashPosts() {
         );
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Spinner size="xl" />
-        </div>
-      ) : currentUser.isAdmin && userPosts.length > 0 ? (
-        <>
-          <Table hoverable className="shadow-md">
-            <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Post Image</Table.HeadCell>
-              <Table.HeadCell>Post title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
-              <Table.HeadCell>Edit</Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          Your Posts
+        </h1>
+        <Button gradientDuoTone="purpleToPink" size="sm">
+          <Link to="/create-post">Create Post</Link>
+        </Button>
+      </div>
+
+      {userPosts.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+        >
+          <div className="overflow-x-auto">
+            <Table hoverable>
+              <Table.Head>
+                <Table.HeadCell>Post Image</Table.HeadCell>
+                <Table.HeadCell>Post Title</Table.HeadCell>
+                <Table.HeadCell>Category</Table.HeadCell>
+                <Table.HeadCell>Created At</Table.HeadCell>
+                <Table.HeadCell>Actions</Table.HeadCell>
+              </Table.Head>
               {userPosts.map((post) => (
-                <Table.Row
-                  key={post._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
+                <Table.Body key={post._id} className="divide-y">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell>
                       <img
                         src={post.image}
                         alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500"
+                        className="w-16 h-16 rounded-lg object-cover"
                       />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="font-medium text-gray-900 dark:text-white"
-                      to={`/post/${post.slug}`}
-                    >
+                    </Table.Cell>
+                    <Table.Cell className="font-medium text-gray-900 dark:text-white">
                       {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
-                  <Table.Cell>
-                    <span
-                      className="font-medium text-red-500 hover:underline cursor-pointer"
-                      onClick={() => {
-                        setShowModal(true);
-                        setPostIdToDelete(post._id);
-                      }}
-                    >
-                      Delete
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="text-teal-500 hover:underline"
-                      to={`/update-post/${post._id}`}
-                    >
-                      <span>Edit</span>
-                    </Link>
-                  </Table.Cell>
-                </Table.Row>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full text-sm">
+                        {post.category}
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex space-x-2">
+                        <Button
+                          size="xs"
+                          gradientDuoTone="purpleToPink"
+                          as={Link}
+                          to={`/update-post/${post._id}`}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="xs"
+                          gradientDuoTone="pinkToOrange"
+                          onClick={() => {
+                            setShowModal(true);
+                            setPostIdToDelete(post._id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
               ))}
-            </Table.Body>
-          </Table>
+            </Table>
+          </div>
           {showMore && (
-            <button
-              className="w-full text-teal-500 self-center text-sm py-7"
-              onClick={handleShowMore}
-            >
-              Show more
-            </button>
+            <div className="p-4 text-center">
+              <Button
+                gradientDuoTone="purpleToPink"
+                size="sm"
+                onClick={handleShowMore}
+              >
+                Show More
+              </Button>
+            </div>
           )}
-        </>
+        </motion.div>
       ) : (
-        <p>You have no post yet!</p>
+        <div className="text-center py-12">
+          <p className="text-gray-500 dark:text-gray-400 text-lg">
+            You haven't created any posts yet.
+          </p>
+          <Button
+            gradientDuoTone="purpleToPink"
+            size="sm"
+            className="mt-4"
+            as={Link}
+            to="/create-post"
+          >
+            Create Your First Post
+          </Button>
+        </div>
       )}
+
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}
@@ -168,16 +198,19 @@ export default function DashPosts() {
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mx-auto mb-4" />
             <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
               Are you sure you want to delete this post?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeletePost}>
-                Yes, I&apos;m sure
-              </Button>
-              <Button color="gray" onClick={() => setShowModal(false)}>
+              <Button
+                gradientDuoTone="purpleToPink"
+                onClick={() => setShowModal(false)}
+              >
                 No, cancel
+              </Button>
+              <Button gradientDuoTone="failure" onClick={handleDeletePost}>
+                Yes, I'm sure
               </Button>
             </div>
           </div>

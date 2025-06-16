@@ -8,6 +8,7 @@ import {
 } from "react-icons/hi";
 import { Button, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function DashboardComp() {
   const [users, setUsers] = useState([]);
@@ -62,7 +63,6 @@ export default function DashboardComp() {
       }
     };
 
-    // Make sure currentuser is defined and check if isAdmin exists
     if (currentUser && currentUser.isAdmin) {
       fetchUsers();
       fetchPosts();
@@ -71,148 +71,232 @@ export default function DashboardComp() {
   }, [currentUser]);
 
   return (
-    <div className="p-3 md:mx-auto">
-      <div className="flex-wrap flex gap-4 justify-center">
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
-          <div className="flex justify-between ">
-            <div className="">
-              <h3 className="text-gray-500 text-md uppercase">Total Users</h3>
-              <p className="text-2xl"> {totalUsers}</p>
+    <div className="space-y-8">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                Total Users
+              </p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                {totalUsers}
+              </p>
+              <div className="flex items-center mt-4 text-sm">
+                <span className="text-green-500 flex items-center">
+                  <HiArrowNarrowUp className="mr-1" />
+                  {lastMonthUsers}
+                </span>
+                <span className="text-gray-500 dark:text-gray-400 ml-2">
+                  Last month
+                </span>
+              </div>
             </div>
-            <HiOutlineUserGroup className="bg-teal-600 text-white rounded-full text-5xl p-3 shadow-lg" />
+            <div className="bg-purple-100 dark:bg-purple-900/30 p-4 rounded-full">
+              <HiOutlineUserGroup className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+            </div>
           </div>
-          <div className="flex gap-2 text-sm">
-            <span className="text-green-500 flex items-center">
-              <HiArrowNarrowUp />
-              {lastMonthUsers}
-            </span>
-            <div className="text-gray-500">Last month</div>
-          </div>
-        </div>
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
-          <div className="flex justify-between ">
-            <div className="">
-              <h3 className="text-gray-500 text-md uppercase">
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                 Total Comments
-              </h3>
-              <p className="text-2xl"> {totalComments}</p>
+              </p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                {totalComments}
+              </p>
+              <div className="flex items-center mt-4 text-sm">
+                <span className="text-green-500 flex items-center">
+                  <HiArrowNarrowUp className="mr-1" />
+                  {lastMonthComments}
+                </span>
+                <span className="text-gray-500 dark:text-gray-400 ml-2">
+                  Last month
+                </span>
+              </div>
             </div>
-            <HiAnnotation className="bg-indigo-600 text-white rounded-full text-5xl p-3 shadow-lg" />
-          </div>
-          <div className="flex gap-2 text-sm">
-            <span className="text-green-500 flex items-center">
-              <HiArrowNarrowUp />
-              {lastMonthComments}
-            </span>
-            <div className="text-gray-500">Last month</div>
-          </div>
-        </div>
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
-          <div className="flex justify-between ">
-            <div className="">
-              <h3 className="text-gray-500 text-md uppercase">Total Posts</h3>
-              <p className="text-2xl"> {totalPosts}</p>
+            <div className="bg-indigo-100 dark:bg-indigo-900/30 p-4 rounded-full">
+              <HiAnnotation className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
             </div>
-            <HiDocumentText className="bg-lime-600 text-white rounded-full text-5xl p-3 shadow-lg" />
           </div>
-          <div className="flex gap-2 text-sm">
-            <span className="text-green-500 flex items-center">
-              <HiArrowNarrowUp />
-              {lastMonthPosts}
-            </span>
-            <div className="text-gray-500">Last month</div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                Total Posts
+              </p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
+                {totalPosts}
+              </p>
+              <div className="flex items-center mt-4 text-sm">
+                <span className="text-green-500 flex items-center">
+                  <HiArrowNarrowUp className="mr-1" />
+                  {lastMonthPosts}
+                </span>
+                <span className="text-gray-500 dark:text-gray-400 ml-2">
+                  Last month
+                </span>
+              </div>
+            </div>
+            <div className="bg-green-100 dark:bg-green-900/30 p-4 rounded-full">
+              <HiDocumentText className="w-8 h-8 text-green-600 dark:text-green-400" />
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-      <div className="flex flex-wrap gap-4 py-3 mx-auto justify-center">
-        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
-          <div className="flex justify-between p-3 text-sm font-semibold">
-            <h1 className="text-center">Recent Users</h1>
 
-            <Button outline gradientDuoTone={"purpleToPink"}>
-              <Link to={"/dashboard?tab=users"}> See all</Link>
-            </Button>
+      {/* Recent Activity Tables */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Users */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+        >
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Recent Users
+              </h2>
+              <Button size="sm" gradientDuoTone="purpleToPink">
+                <Link to="/dashboard?tab=users">See all</Link>
+              </Button>
+            </div>
           </div>
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>User image</Table.HeadCell>
-              <Table.HeadCell>User name</Table.HeadCell>
-            </Table.Head>
-            {users &&
-              users.map((user) => (
-                <Table.Body key={user._id} className="divide-y">
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell>
-                      <img
-                        src={user.profilePicture}
-                        alt="user"
-                        className="w-10 h-10 rounded-full bg-gray-500"
-                      />
-                    </Table.Cell>
-                    <Table.Cell>{user.username}</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
+          <div className="p-6">
+            <div className="space-y-4">
+              {users.map((user) => (
+                <div
+                  key={user._id}
+                  className="flex items-center space-x-4 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200"
+                >
+                  <img
+                    src={user.profilePicture}
+                    alt={user.username}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-purple-500"
+                  />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {user.username}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
               ))}
-          </Table>
-        </div>
-        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
-          <div className="flex justify-between p-3 text-sm font-semibold">
-            <h1 className="text-center">Recent Comments</h1>
+            </div>
+          </div>
+        </motion.div>
 
-            <Button outline gradientDuoTone={"purpleToPink"}>
-              <Link to={"/dashboard?tab=comments"}>See all</Link>
-            </Button>
+        {/* Recent Comments */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+        >
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Recent Comments
+              </h2>
+              <Button size="sm" gradientDuoTone="purpleToPink">
+                <Link to="/dashboard?tab=comments">See all</Link>
+              </Button>
+            </div>
           </div>
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>Comment content</Table.HeadCell>
-              <Table.HeadCell>Likes</Table.HeadCell>
-            </Table.Head>
-            {comments &&
-              comments.map((comment) => (
-                <Table.Body key={comment._id} className="divide-y">
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell>
-                      <p className="line-clamp-2"> {comment.content}</p>
-                    </Table.Cell>
-                    <Table.Cell>{comment.numberOfLikes}</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
+          <div className="p-6">
+            <div className="space-y-4">
+              {comments.map((comment) => (
+                <div
+                  key={comment._id}
+                  className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                >
+                  <p className="text-gray-800 dark:text-gray-200 line-clamp-2">
+                    {comment.content}
+                  </p>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {new Date(comment.createdAt).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center text-purple-600 dark:text-purple-400">
+                      <HiAnnotation className="w-4 h-4 mr-1" />
+                      {comment.numberOfLikes}
+                    </span>
+                  </div>
+                </div>
               ))}
-          </Table>
-        </div>
-        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
-          <div className="flex justify-between p-3 text-sm font-semibold">
-            <h1 className="text-center">Recent Posts</h1>
+            </div>
+          </div>
+        </motion.div>
 
-            <Button outline gradientDuoTone={"purpleToPink"}>
-              <Link to={"/dashboard?tab=posts"}> See all</Link>
-            </Button>
+        {/* Recent Posts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden"
+        >
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Recent Posts
+              </h2>
+              <Button size="sm" gradientDuoTone="purpleToPink">
+                <Link to="/dashboard?tab=posts">See all</Link>
+              </Button>
+            </div>
           </div>
-          <Table hoverable>
-            <Table.Head>
-              <Table.HeadCell>Post image</Table.HeadCell>
-              <Table.HeadCell>Post Title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-            </Table.Head>
-            {posts &&
-              posts.map((post) => (
-                <Table.Body key={post._id} className="divide-y">
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell>
-                      <img
-                        src={post.image}
-                        alt="user"
-                        className="w-14 h-10 rounded-md bg-gray-500"
-                      />
-                    </Table.Cell>
-                    <Table.Cell className="w-96">{post.title}</Table.Cell>
-                    <Table.Cell className="w-5">{post.category}</Table.Cell>
-                  </Table.Row>
-                </Table.Body>
+          <div className="p-6">
+            <div className="space-y-4">
+              {posts.map((post) => (
+                <Link
+                  key={post._id}
+                  to={`/post/${post.slug}`}
+                  className="block group"
+                >
+                  <div className="flex items-center space-x-4 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-200">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-16 h-16 rounded-lg object-cover"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 truncate">
+                        {post.title}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {post.category}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               ))}
-          </Table>
-        </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
