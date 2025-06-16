@@ -22,18 +22,17 @@ export default function CreatePost() {
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
 
-  // Define custom toolbar options
   const toolbarOptions = [
-    [{ font: [] }], // Font family
-    [{ header: [1, 2, 3, 4, 5, 6, false] }], // Header levels
-    ["bold", "italic", "underline", "strike"], // Formatting
-    [{ color: [] }, { background: [] }], // Text and background color
-    [{ list: "ordered" }, { list: "bullet" }], // Lists
-    [{ indent: "-1" }, { indent: "+1" }], // Indentation
-    [{ align: [] }], // Text alignment
-    ["blockquote", "code-block"], // Blockquote and code
-    ["link", "image"], // Links and images
-    ["clean"], // Clear formatting
+    [{ font: [] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ align: [] }],
+    ["blockquote", "code-block"],
+    ["link", "image"],
+    ["clean"],
   ];
 
   const modules = {
@@ -67,7 +66,7 @@ export default function CreatePost() {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
-            setImageUploadError(null); // Fixed this line
+            setImageUploadError(null);
             setFormData({ ...formData, image: downloadURL });
           });
         }
@@ -100,168 +99,184 @@ export default function CreatePost() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="p-6 max-w-4xl mx-auto min-h-screen"
-    >
-      <motion.h1
-        initial={{ y: -20 }}
-        animate={{ y: 0 }}
-        className="text-center text-4xl my-8 font-bold bg-gradient-to-r from-teal-500 to-cyan-500 text-transparent bg-clip-text"
-      >
-        Create Your Post
-      </motion.h1>
-
-      <motion.form
-        initial={{ y: 20 }}
-        animate={{ y: 0 }}
-        className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg"
-        onSubmit={handleSubmit}
-      >
-        {/* Title and Category Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Post Title
-            </label>
-            <TextInput
-              type="text"
-              placeholder="Enter your post title..."
-              required
-              id="title"
-              className="w-full focus:ring-teal-500 focus:border-teal-500"
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Category
-            </label>
-            <Select
-              className="w-full"
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            >
-              <option value="uncategorized">Select a category</option>
-              <option value="javascript">JavaScript</option>
-              <option value="react">React.js</option>
-              <option value="nextjs">Next.js</option>
-            </Select>
-          </div>
-        </div>
-
-        {/* Image Upload Section */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Featured Image
-          </label>
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 items-center justify-between border-2 border-teal-500/30 dark:border-teal-500/20 rounded-xl p-6 bg-gray-50 dark:bg-gray-800/50"
-            whileHover={{ scale: 1.01 }}
-          >
-            <FileInput
-              type="file"
-              accept="image/*"
-              onChange={(e) => setFile(e.target.files[0])}
-              className="flex-1"
-            />
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                type="button"
-                gradientDuoTone="purpleToBlue"
-                outline
-                onClick={handleUploadImage}
-                disabled={imageUploadProgress}
-                className="w-full sm:w-auto"
-              >
-                {imageUploadProgress ? (
-                  <div className="w-16 h-16">
-                    <CircularProgressbar
-                      value={imageUploadProgress}
-                      text={`${imageUploadProgress || 0}%`}
-                      styles={{
-                        path: { stroke: '#14B8A6' },
-                        text: { fill: '#14B8A6', fontSize: '24px' }
-                      }}
-                    />
-                  </div>
-                ) : (
-                  "Upload Image"
-                )}
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          {imageUploadError && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <Alert color="failure" className="font-medium">
-                {imageUploadError}
-              </Alert>
-            </motion.div>
-          )}
-
-          {formData.image && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl overflow-hidden shadow-lg"
-            >
-              <img
-                src={formData.image}
-                alt="uploaded"
-                className="w-full h-80 object-cover hover:scale-105 transition-transform duration-300"
-              />
-            </motion.div>
-          )}
-        </div>
-
-        {/* Content Editor Section */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Post Content
-          </label>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-            <ReactQuill
-              theme="snow"
-              placeholder="Start writing your post..."
-              className="h-96 mb-12"
-              required
-              modules={modules}
-              onChange={(value) => setFormData({ ...formData, content: value })}
-            />
-          </div>
-        </div>
-
-        {/* Submit Button */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="flex justify-end pt-6"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden"
         >
-          <Button
-            type="submit"
-            gradientDuoTone="purpleToBlue"
-            size="lg"
-            className="w-full sm:w-auto font-semibold"
-          >
-            Publish Post
-          </Button>
-        </motion.div>
+          {/* Header */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-500 opacity-10" />
+            <div className="relative px-6 py-8 sm:px-12 sm:py-12">
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white text-center">
+                Create Your Post
+              </h1>
+              <p className="mt-2 text-center text-gray-600 dark:text-gray-300">
+                Share your thoughts and ideas with the world
+              </p>
+            </div>
+          </div>
 
-        {publishError && (
-          <motion.div
+          {/* Form */}
+          <motion.form
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="p-6 sm:p-8 space-y-8"
+            onSubmit={handleSubmit}
           >
-            <Alert color="failure" className="mt-5">
-              {publishError}
-            </Alert>
-          </motion.div>
-        )}
-      </motion.form>
-    </motion.div>
+            {/* Title and Category */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Post Title
+                </label>
+                <TextInput
+                  type="text"
+                  placeholder="Enter your post title..."
+                  required
+                  id="title"
+                  className="w-full"
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Category
+                </label>
+                <Select
+                  className="w-full"
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
+                >
+                  <option value="uncategorized">Select a category</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="react">React.js</option>
+                  <option value="nextjs">Next.js</option>
+                </Select>
+              </div>
+            </div>
+
+            {/* Image Upload */}
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Featured Image
+              </label>
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 items-center justify-between border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 bg-gray-50 dark:bg-gray-800/50"
+                whileHover={{ scale: 1.01 }}
+              >
+                <FileInput
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFile(e.target.files[0])}
+                  className="flex-1"
+                />
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button
+                    type="button"
+                    gradientDuoTone="purpleToPink"
+                    outline
+                    onClick={handleUploadImage}
+                    disabled={imageUploadProgress}
+                    className="w-full sm:w-auto"
+                  >
+                    {imageUploadProgress ? (
+                      <div className="w-16 h-16">
+                        <CircularProgressbar
+                          value={imageUploadProgress}
+                          text={`${imageUploadProgress || 0}%`}
+                          styles={{
+                            path: { stroke: "#8B5CF6" },
+                            text: { fill: "#8B5CF6", fontSize: "24px" },
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      "Upload Image"
+                    )}
+                  </Button>
+                </motion.div>
+              </motion.div>
+
+              {imageUploadError && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <Alert color="failure" className="font-medium">
+                    {imageUploadError}
+                  </Alert>
+                </motion.div>
+              )}
+
+              {formData.image && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl overflow-hidden shadow-lg"
+                >
+                  <img
+                    src={formData.image}
+                    alt="uploaded"
+                    className="w-full h-80 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </motion.div>
+              )}
+            </div>
+
+            {/* Content Editor */}
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Post Content
+              </label>
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                <ReactQuill
+                  theme="snow"
+                  placeholder="Start writing your post..."
+                  className="h-96 mb-12"
+                  required
+                  modules={modules}
+                  onChange={(value) =>
+                    setFormData({ ...formData, content: value })
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {publishError && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Alert color="failure" className="font-medium">
+                  {publishError}
+                </Alert>
+              </motion.div>
+            )}
+
+            {/* Submit Button */}
+            <motion.div
+              className="flex justify-end pt-6"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Button
+                type="submit"
+                gradientDuoTone="purpleToPink"
+                size="lg"
+                className="w-full sm:w-auto font-semibold"
+              >
+                Publish Post
+              </Button>
+            </motion.div>
+          </motion.form>
+        </motion.div>
+      </div>
+    </div>
   );
 }
