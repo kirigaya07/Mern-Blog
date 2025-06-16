@@ -13,6 +13,7 @@ function SignUp() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.username || !formData.email || !formData.password) {
@@ -41,82 +42,203 @@ function SignUp() {
       setLoading(false);
     }
   };
+
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
-        {/*Left */}
-        <div className="flex-1">
-          <Link
-            to="/"
-            className=" sm:text-xl font-bold dark:text-white text-4xl"
-          >
-            <span className="px-2 py-1 bg-gradient-to-r from-purple-500 via-blue-400 to-blue-500 rounded-lg text-white">
-              Zudo's{" "}
-            </span>
-            Blog
-          </Link>
-          <p className="text-sm mt-5">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </p>
-        </div>
-        {/* Right*/}
-        <div className="flex-1">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div>
-              <Label value="Your Username" />
-              <TextInput
-                type="text"
-                placeholder="Username"
-                id="username"
-                onChange={handleChange}
-              />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+            <div className="flex flex-col md:flex-row">
+              {/* Left side - Branding */}
+              <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-blue-500 p-12 text-white">
+                <div className="h-full flex flex-col justify-center">
+                  <Link to="/" className="inline-block mb-8">
+                    <h1 className="text-4xl font-bold">
+                      <span className="bg-white text-purple-600 px-3 py-1 rounded-lg">
+                        Zudo's
+                      </span>{" "}
+                      Blog
+                    </h1>
+                  </Link>
+                  <h2 className="text-3xl font-bold mb-4">
+                    Join Our Community!
+                  </h2>
+                  <p className="text-lg text-purple-100 mb-8">
+                    Create your account and start sharing your thoughts with the
+                    world.
+                  </p>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <span>Create and share content</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <span>Connect with others</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <span>Engage in discussions</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right side - Form */}
+              <div className="md:w-1/2 p-12">
+                <div className="max-w-md mx-auto">
+                  <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-8">
+                    Create Account
+                  </h2>
+                  <form className="space-y-6" onSubmit={handleSubmit}>
+                    <div>
+                      <Label
+                        value="Username"
+                        className="text-gray-700 dark:text-gray-300"
+                      />
+                      <TextInput
+                        type="text"
+                        placeholder="johndoe"
+                        id="username"
+                        onChange={handleChange}
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label
+                        value="Email Address"
+                        className="text-gray-700 dark:text-gray-300"
+                      />
+                      <TextInput
+                        type="email"
+                        placeholder="name@example.com"
+                        id="email"
+                        onChange={handleChange}
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label
+                        value="Password"
+                        className="text-gray-700 dark:text-gray-300"
+                      />
+                      <TextInput
+                        type="password"
+                        placeholder="••••••••"
+                        id="password"
+                        onChange={handleChange}
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                    <Button
+                      gradientDuoTone="purpleToPink"
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 text-lg font-medium transition-all duration-200 hover:shadow-lg"
+                    >
+                      {loading ? (
+                        <div className="flex items-center justify-center">
+                          <Spinner size="sm" />
+                          <span className="ml-3">Creating account...</span>
+                        </div>
+                      ) : (
+                        "Sign Up"
+                      )}
+                    </Button>
+
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
+                          Or continue with
+                        </span>
+                      </div>
+                    </div>
+
+                    <OAuth />
+
+                    <div className="text-center mt-6">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Already have an account?{" "}
+                      </span>
+                      <Link
+                        to="/sign-in"
+                        className="text-purple-600 hover:text-purple-700 font-medium transition-colors duration-200"
+                      >
+                        Sign In
+                      </Link>
+                    </div>
+                  </form>
+
+                  {errorMessage && (
+                    <Alert className="mt-6" color="failure">
+                      <div className="flex items-center">
+                        <svg
+                          className="w-5 h-5 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        {errorMessage}
+                      </div>
+                    </Alert>
+                  )}
+                </div>
+              </div>
             </div>
-            <div>
-              <Label value="Your Email" />
-              <TextInput
-                type="email"
-                placeholder="Email"
-                id="email"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label value="Your Password" />
-              <TextInput
-                type="password"
-                placeholder="Password"
-                id="password"
-                onChange={handleChange}
-              />
-            </div>
-            <Button
-              gradientDuoTone="purpleToPink"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
-                </>
-              ) : (
-                "Sign Up"
-              )}
-            </Button>
-            <OAuth />
-          </form>
-          <div className="flex gap-2 text-sm mt-2">
-            <span>Have an account?</span>
-            <Link to="/sign-in" className="text-blue-500">
-              Sign In
-            </Link>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
         </div>
       </div>
     </div>
