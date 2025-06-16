@@ -8,7 +8,7 @@ import CommentSection from "../components/CommentSection";
 import PostCard from "../components/PostCard";
 import { motion } from "framer-motion";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Ensure ReactQuill CSS is imported
+import "react-quill/dist/quill.snow.css";
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -57,91 +57,162 @@ export default function PostPage() {
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 1 } },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   const modules = {
-    toolbar: false, // Disable the toolbar
+    toolbar: false,
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-500 mb-4">
+            Error loading post
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
+            We couldn't load the post you're looking for.
+          </p>
+          <Link
+            to="/"
+            className="text-purple-600 hover:text-purple-700 font-medium"
+          >
+            Return to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.main
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen"
+      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
     >
-      {loading ? (
-        <div className="flex justify-center items-center h-full">
-          <Spinner size="xl" />
-        </div>
-      ) : error ? (
-        <div className="text-center text-red-500">Error loading post.</div>
-      ) : (
-        <>
-          <motion.h1
-            variants={containerVariants}
-            className="text-3xl mt-10 p-3 text-center font-serif max-w-4xl mx-auto lg:text-4xl"
-          >
-            {post && post.title}
-          </motion.h1>
-          <Link
-            to={`/search?category=${post && post.category}`}
-            className="self-center mt-5"
-          >
-            <Button color="gray" pill size="xs">
-              {post && post.category}
-            </Button>
-          </Link>
-          <motion.img
-            variants={containerVariants}
-            src={post && post.image}
-            alt={post && post.title}
-            className="mt-10 p-3 max-h-[600px] w-full object-cover"
-          />
+      {/* Hero Section */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-blue-500/10 dark:from-purple-600/20 dark:to-blue-500/20" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <motion.div
-            variants={containerVariants}
-            className="flex justify-between p-3 mx-auto w-full max-w-4xl text-xs"
+            variants={itemVariants}
+            className="text-center max-w-4xl mx-auto"
           >
-            <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
-            <span className="italic">
-              {post && (post.content.length / 1000).toFixed(0)} mins read
-            </span>
-          </motion.div>
-
-          {/* Improved content section */}
-          <motion.div
-            variants={containerVariants}
-            className="p-3 max-w-4xl mx-auto w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg mt-10" // Dark background in dark mode
-          >
-            <ReactQuill
-              value={post.content} // Content from backend
-              readOnly={true} // Only display the content, no editing
-              theme="snow" // Snow theme for ReactQuill
-              modules={modules} // Disable the toolbar
-              className="post-content text-lg leading-relaxed text-gray-900 dark:text-gray-100" // Adjusted text color for dark mode
-            />
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            className="max-w-4xl mx-auto w-full"
-          >
-            <CallToAction />
-          </motion.div>
-          <CommentSection postId={post && post._id} />
-
-          <div className="flex flex-col justify-center items-center mb-5">
-            <h1 className="text-xl mt-5">Recent articles</h1>
-            <div className="flex flex-wrap justify-center gap-5 mt-5">
-              {recentPosts &&
-                recentPosts.map((post) => (
-                  <PostCard key={post._id} post={post} />
-                ))}
+            <Link
+              to={`/search?category=${post?.category}`}
+              className="inline-block mb-6"
+            >
+              <Button
+                gradientDuoTone="purpleToPink"
+                size="sm"
+                className="rounded-full"
+              >
+                {post?.category}
+              </Button>
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              {post?.title}
+            </h1>
+            <div className="flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-300">
+              <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
+              <span>•</span>
+              <span>{(post?.content.length / 1000).toFixed(0)} mins read</span>
             </div>
-          </div>
-        </>
-      )}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Featured Image */}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-16"
+      >
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <img
+            src={post?.image}
+            alt={post?.title}
+            className="w-full h-[500px] object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </div>
+      </motion.div>
+
+      {/* Content Section */}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16"
+      >
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <ReactQuill
+            value={post?.content}
+            readOnly={true}
+            theme="snow"
+            modules={modules}
+            className="post-content text-lg leading-relaxed text-gray-900 dark:text-gray-100"
+          />
+        </div>
+      </motion.div>
+
+      {/* Call to Action */}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16"
+      >
+        <CallToAction />
+      </motion.div>
+
+      {/* Comments Section */}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-16"
+      >
+        <CommentSection postId={post?._id} />
+      </motion.div>
+
+      {/* Recent Articles */}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20"
+      >
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Recent Articles
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            Discover more interesting content
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {recentPosts?.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))}
+        </div>
+      </motion.div>
     </motion.main>
   );
 }
