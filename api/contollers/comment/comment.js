@@ -1,4 +1,6 @@
 import Comment from "../../models/comment/comment.js";
+import Post from "../../models/post/post.js";
+import User from "../../models/user/user.js";
 import { errorHandler } from "../../utils/errors.js";
 
 export const CreateComment = async (req, res, next) => {
@@ -107,10 +109,27 @@ export const getComments = async (req, res, next) => {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order === "desc" ? -1 : 1;
+
     const comments = await Comment.find()
       .sort({ createdAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
+
+    // Get post and user information for each comment
+    const populatedComments = await Promise.all(
+      comments.map(async (comment) => {
+        const post = await Post.findById(comment.postId);
+        const user = await User.findById(comment.userId);
+        return {
+          ...comment.toObject(),
+          postSlug: post ? post.slug : null,
+          postTitle: post ? post.title : "Post not found",
+          username: user ? user.username : "User not found",
+          userProfilePicture: user ? user.profilePicture : "",
+        };
+      })
+    );
+
     const totalComments = await Comment.countDocuments();
     const now = new Date();
     const oneMonthAgo = new Date(now);
@@ -119,7 +138,9 @@ export const getComments = async (req, res, next) => {
       createdAt: { $gte: oneMonthAgo },
     });
 
-    res.status(200).json({ comments, totalComments, lastMonthComments });
+    res
+      .status(200)
+      .json({ comments: populatedComments, totalComments, lastMonthComments });
   } catch (error) {
     next(error);
   }
