@@ -95,7 +95,7 @@ export default function PostPage() {
             Error loading post
           </h2>
           <p className="text-gray-600 dark:text-gray-300 mb-4">
-            We couldn't load the post you're looking for.
+            We couldn&apos;t load the post you&apos;re looking for.
           </p>
           <Link
             to="/"
