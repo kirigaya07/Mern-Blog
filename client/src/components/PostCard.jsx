@@ -5,67 +5,83 @@ import { motion } from "framer-motion";
 export default function PostCard({ post }) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{
-        scale: 1.03,
-        boxShadow: "0px 20px 80px rgba(0, 128, 128, 0.15)",
-        transition: { duration: 0.4 },
-      }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="group relative w-full h-[400px] overflow-hidden rounded-xl border-2 border-teal-500/30 sm:w-[430px] shadow-xl bg-gradient-to-br from-white via-teal-50/30 to-white dark:from-gray-800 dark:via-teal-900/10 dark:to-gray-900"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
-      <Link to={`/post/${post.slug}`} className="block h-full">
-        {/* Image Section with Enhanced Parallax and Fade */}
-        <motion.div
-          className="relative h-[260px] w-full overflow-hidden rounded-t-xl"
-          initial={{ y: 30 }}
-          animate={{ y: 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        >
-          <img
-            src={post.image}
-            alt="post cover"
-            className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
-        </motion.div>
+      {/* Image Container */}
+      <motion.div
+        className="relative h-64 overflow-hidden"
+        whileHover={{ scale: 1.05 }}
+        transition={{ duration: 0.3 }}
+      >
+        <img
+          src={post.image}
+          alt={post.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </motion.div>
 
-        {/* Content Section with Enhanced Animations */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileHover={{ y: -5 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="p-5 flex flex-col gap-4 relative"
-        >
-          {/* Category Tag with Glass Effect */}
-          <motion.span
-            className="self-start px-4 py-1.5 text-xs font-semibold text-white bg-teal-500/90 rounded-full shadow-lg backdrop-blur-sm dark:bg-teal-600/90"
-            whileHover={{ scale: 1.05, y: -2 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      {/* Content Container */}
+      <div className="p-6">
+        {/* Category Badge */}
+        <div className="inline-block px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 text-sm font-medium rounded-full mb-4">
+          {post.category}
+        </div>
+
+        {/* Title */}
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
+          {post.title}
+        </h2>
+
+        {/* Description */}
+        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+          {post.content.replace(/<[^>]*>/g, "")}
+        </p>
+
+        {/* Author and Date */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <img
+              src={
+                post.user?.profilePicture ||
+                "https://ui-avatars.com/api/?name=User&background=8B5CF6&color=fff"
+              }
+              alt={post.user?.username || "User"}
+              className="w-10 h-10 rounded-full object-cover border-2 border-purple-500"
+            />
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {post.user?.username || "Anonymous"}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {new Date(post.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+          <Link
+            to={`/post/${post.slug}`}
+            className="inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium"
           >
-            {post.category}
-          </motion.span>
-
-          {/* Title with Enhanced Typography */}
-          <motion.h2
-            className="text-xl font-bold line-clamp-2 text-gray-800 dark:text-gray-100 group-hover:text-teal-600 transition-all duration-300"
-            whileHover={{ scale: 1.02 }}
-          >
-            {post.title}
-          </motion.h2>
-
-          {/* Animated Divider */}
-          <motion.div
-            className="h-0.5 bg-gradient-to-r from-teal-500 to-teal-300 group-hover:from-teal-600 group-hover:to-teal-400"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            style={{ transformOrigin: "left" }}
-          />
-        </motion.div>
-      </Link>
+            Read more
+            <svg
+              className="w-4 h-4 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
+        </div>
+      </div>
     </motion.div>
   );
 }
