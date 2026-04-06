@@ -175,7 +175,7 @@ export default function Header() {
         <Navbar.Link
           as={"div"}
           className={`text-sm ${
-            path === "/projects"
+            path === "/resources"
               ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-500"
               : "text-gray-800 dark:text-gray-200"
           } hover:text-purple-600 dark:hover:text-purple-400 transition-all`}

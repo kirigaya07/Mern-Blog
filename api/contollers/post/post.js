@@ -1,4 +1,5 @@
 import Post from "../../models/post/post.js";
+import User from "../../models/user/user.js";
 import { errorHandler } from "../../utils/errors.js";
 
 export const create = async (req, res, next) => {
@@ -55,6 +56,16 @@ export const getPost = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
+    // Populate author data for each post so the frontend can display it
+    const postsWithUser = await Promise.all(
+      posts.map(async (post) => {
+        const user = await User.findById(post.userId).select(
+          "username profilePicture"
+        );
+        return { ...post._doc, user: user || null };
+      })
+    );
+
     const totalPosts = await Post.countDocuments(query);
     const now = new Date();
     const oneMonthAgo = new Date(
@@ -67,7 +78,7 @@ export const getPost = async (req, res, next) => {
       createdAt: { $gte: oneMonthAgo },
     });
 
-    res.status(200).json({ posts, totalPosts, lastMonthPosts });
+    res.status(200).json({ posts: postsWithUser, totalPosts, lastMonthPosts });
   } catch (error) {
     next(error);
   }

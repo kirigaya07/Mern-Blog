@@ -6,9 +6,10 @@ export default function PostCard({ post }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300"
     >
       {/* Image Container */}
       <motion.div
